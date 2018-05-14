@@ -27,105 +27,67 @@ corners.Centre[2] = new google.maps.LatLng(39.4032135, -119.7440720);
 */
 
 var ImageBucket = 'https://storage.googleapis.com/bucket-blipmap-tahoe/'
-var NumDays = 3
+var FcstForwardDays = 2
+var NumberOfRuns = 2
 
 var dayName   = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 var monthName = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+var mS_Day = 24 * 60 * 60 * 1000;
 
 var forecasts = [];
 
 var Now = new Date().getTime();
-var T = new Date();
-T.setTime(Now);
-var mS_Day = 24 * 60 * 60 * 1000;
+var RunDate = new Date();
+var FCSTDate = new Date();
 
-for(i = 0; i < NumDays; i++){
-    var f = {
-        'name': dayName[T.getDay()] + ' ' + T.getDate() + ' ' + monthName[T.getMonth()],
-        'latlon_file': 'latlon2d.json',
-        'date': T.getTime(),
-        'default_t': '1400',
-        'dir': ImageBucket + 'OUT%2B' + i + '/FCST/',
-        'bounds': corners.Bounds[2],
-        'centre': corners.Centre[2],
+RunDate.setTime(Now);
+FCSTDate.setTime(Now);
+
+function ISODateFormatter(date, delim)
+{
+    var fixed_Month = date.getMonth() + 1;
+    if (fixed_Month < 10) {
+        fixed_Month = '0' + fixed_Month;
     }
-    if (i == 0) {
-        f['name'] += ' - Today'
+    
+    var fixed_Day = date.getDate();
+    if (fixed_Day < 10) {
+        fixed_Day = '0' + fixed_Day;
+    }
+    
+    return date.getFullYear() + delim +
+        fixed_Month + delim +
+        fixed_Day;
+}
+
+for(i = 0; i < NumberOfRuns; i++) {
+
+    for (j = 0; j < FcstForwardDays + 1; j++) {
+        
+        var f = {
+            'name': FCSTDate.toDateString(),
+            'oldname' : dayName[FCSTDate.getDay()] + ' ' + FCSTDate.getDate() + ' ' + monthName[FCSTDate.getMonth()],
+            'latlon_file': 'latlon2d.json',
+            'date': RunDate.getTime(),
+            'default_t': '1400',
+            'dir': ImageBucket +
+                ISODateFormatter(RunDate, '') +
+                '_' +
+                ISODateFormatter(FCSTDate, '') +
+                '/FCST/',
+            'bounds': corners.Bounds[2],
+            'centre': corners.Centre[2],
+        }
+        if (i == 0 && j == 0) {
+            f['name'] += ' - Today';
+        }
+        if (i > 0) {
+            f['name'] += ' - From ' + ISODateFormatter(RunDate, '-');
+        }
+        forecasts.push(f);
+        FCSTDate.setTime(FCSTDate.getTime() + mS_Day);
     }
 
-    forecasts.push(f)
-
-    T.setTime(T.getTime() + mS_Day);
+    RunDate.setTime(RunDate.getTime() - mS_Day);
+    FCSTDate.setTime(RunDate.getTime());
 }
-/*
-var f = {
-    'name': dayName[T.getDay()] + ' ' + T.getDate() + ' ' + monthName[T.getMonth()],
-    'latlon_file': 'latlon2d.json',
-    'date': T.getTime(),
-    'default_t': '1400',
-    'dir': 'https://storage.googleapis.com/bucket-blipmap-tahoe/OUT%2B1/FCST/',
-    'bounds': corners.Bounds[4],
-    'centre': corners.Centre[4],
-}
-forecasts.push(f)
-
-T.setTime(Now + mS_Day * 2);
-var f = {
-    'name': dayName[T.getDay()] + ' ' + T.getDate() + ' ' + monthName[T.getMonth()],
-    'latlon_file': 'latlon2d.json',
-    'date': T.getTime(),
-    'default_t': '1400',
-    'dir': 'OUT+2/FCST/',
-    'bounds': corners.Bounds[4],
-    'centre': corners.Centre[4],
-}
-forecasts.push(f)
-
-T.setTime(Now + mS_Day * 3);
-var f = {
-    'name': dayName[T.getDay()] + ' ' + T.getDate() + ' ' + monthName[T.getMonth()],
-    'latlon_file': 'latlon2d.json',
-    'date': T.getTime(),
-    'default_t': '1400',
-    'dir': 'OUT+3/FCST/',
-    'bounds': corners.Bounds[4],
-    'centre': corners.Centre[4],
-}
-forecasts.push(f)
-
-T.setTime(Now + mS_Day * 4);
-var f = {
-    'name': dayName[T.getDay()] + ' ' + T.getDate() + ' ' + monthName[T.getMonth()],
-    'latlon_file': 'latlon2d.json',
-    'date': T.getTime(),
-    'default_t': '1400',
-    'dir': 'OUT+4/FCST/',
-    'bounds': corners.Bounds[4],
-    'centre': corners.Centre[4],
-}
-forecasts.push(f)
-
-T.setTime(Now + mS_Day * 5);
-var f = {
-    'name': dayName[T.getDay()] + ' ' + T.getDate() + ' ' + monthName[T.getMonth()],
-    'latlon_file': 'latlon2d.json',
-    'date': T.getTime(),
-    'default_t': '1400',
-    'dir': 'OUT+5/FCST/',
-    'bounds': corners.Bounds[4],
-    'centre': corners.Centre[4],
-}
-forecasts.push(f)
-
-T.setTime(Now + mS_Day * 6);
-var f = {
-    'name': dayName[T.getDay()] + ' ' + T.getDate() + ' ' + monthName[T.getMonth()],
-    'latlon_file': 'latlon2d.json',
-    'date': T.getTime(),
-    'default_t': '1400',
-    'dir': 'OUT+6/FCST/',
-    'bounds': corners.Bounds[4],
-    'centre': corners.Centre[4],
-}
-forecasts.push(f)
-*/
