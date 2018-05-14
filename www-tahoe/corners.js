@@ -13,11 +13,21 @@ corners["Centre"] = [];
 corners.Bounds = new Array();
 corners.Centre = new Array();
 
-corners.Bounds[4] = new google.maps.LatLngBounds(
-	new google.maps.LatLng(35.7808380, -122.7370911), // SW
-	new google.maps.LatLng(42.1519356, -116.2817230)  // NE
+corners.Bounds[2] = new google.maps.LatLngBounds(
+        new google.maps.LatLng(37.1399994, -122.3163147), // SW
+        new google.maps.LatLng(41.6664276, -117.1718292)  // NE
 );
-corners.Centre[4] = new google.maps.LatLng(38.9663849, -119.5094070);
+corners.Centre[2] = new google.maps.LatLng(39.4032135, -119.7440720);
+
+/*corners.Bounds[2] = new google.maps.LatLngBounds(
+        new google.maps.LatLng(37.1399994, -122.3163147), // SW
+        new google.maps.LatLng(41.6664276, -117.1718292)  // NE
+    );
+corners.Centre[2] = new google.maps.LatLng(39.4032135, -119.7440720);
+*/
+
+var ImageBucket = 'https://storage.googleapis.com/bucket-blipmap-tahoe/'
+var NumDays = 3
 
 var dayName   = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 var monthName = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -29,24 +39,31 @@ var T = new Date();
 T.setTime(Now);
 var mS_Day = 24 * 60 * 60 * 1000;
 
-var f = {
-    'name': dayName[T.getDay()] + ' ' + T.getDate() + ' ' + monthName[T.getMonth()] + " - Today",
-    'latlon_file': 'latlon2d.json',
-    'date': T.getTime(),
-    'default_t': '1400',
-    'dir': 'OUT/FCST/',
-    'bounds': corners.Bounds[4],
-    'centre': corners.Centre[4],
-}
-forecasts.push(f)
+for(i = 0; i < NumDays; i++){
+    var f = {
+        'name': dayName[T.getDay()] + ' ' + T.getDate() + ' ' + monthName[T.getMonth()],
+        'latlon_file': 'latlon2d.json',
+        'date': T.getTime(),
+        'default_t': '1400',
+        'dir': ImageBucket + 'OUT%2B' + i + '/FCST/',
+        'bounds': corners.Bounds[2],
+        'centre': corners.Centre[2],
+    }
+    if (i == 0) {
+        f['name'] += ' - Today'
+    }
 
-T.setTime(Now + mS_Day);
+    forecasts.push(f)
+
+    T.setTime(T.getTime() + mS_Day);
+}
+/*
 var f = {
     'name': dayName[T.getDay()] + ' ' + T.getDate() + ' ' + monthName[T.getMonth()],
     'latlon_file': 'latlon2d.json',
     'date': T.getTime(),
     'default_t': '1400',
-    'dir': 'OUT+1/FCST/',
+    'dir': 'https://storage.googleapis.com/bucket-blipmap-tahoe/OUT%2B1/FCST/',
     'bounds': corners.Bounds[4],
     'centre': corners.Centre[4],
 }
@@ -111,3 +128,4 @@ var f = {
     'centre': corners.Centre[4],
 }
 forecasts.push(f)
+*/
