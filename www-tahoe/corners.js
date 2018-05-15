@@ -29,6 +29,7 @@ corners.Centre[2] = new google.maps.LatLng(39.4032135, -119.7440720);
 var ImageBucket = 'https://storage.googleapis.com/bucket-blipmap-tahoe/'
 var FcstForwardDays = 2
 var NumberOfRuns = 2
+var RunHour = 8
 
 var dayName   = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 var monthName = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -36,9 +37,13 @@ var mS_Day = 24 * 60 * 60 * 1000;
 
 var forecasts = [];
 
-var Now = new Date().getTime();
+var Now = new Date();
 var RunDate = new Date();
 var FCSTDate = new Date();
+
+if (Now.getHours() < RunHour) {
+    Now.setTime(Now.getTime() - mS_Day);
+}
 
 RunDate.setTime(Now);
 FCSTDate.setTime(Now);
@@ -49,12 +54,12 @@ function ISODateFormatter(date, delim)
     if (fixed_Month < 10) {
         fixed_Month = '0' + fixed_Month;
     }
-    
+
     var fixed_Day = date.getDate();
     if (fixed_Day < 10) {
         fixed_Day = '0' + fixed_Day;
     }
-    
+
     return date.getFullYear() + delim +
         fixed_Month + delim +
         fixed_Day;
@@ -72,7 +77,7 @@ for(i = 0; i < NumberOfRuns; i++) {
             'default_t': '1400',
             'dir': ImageBucket +
                 ISODateFormatter(RunDate, '') +
-                '_' +
+                '/' +
                 ISODateFormatter(FCSTDate, '') +
                 '/FCST/',
             'bounds': corners.Bounds[2],
