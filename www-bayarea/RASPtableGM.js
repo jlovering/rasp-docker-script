@@ -44,7 +44,7 @@ var centre;
 var zoom = typeof default_zoom !== 'undefined' ? default_zoom : 10;		// default zoom
 var ctrFlag = false;
 var OPACITY_MAX_PIXELS = 57; // Width of opacity control image
-var opacity_control = "N";
+var opacity_control = false;
 var opacityCtrlKnob;
 
 var waslong = false;	// longclick
@@ -64,7 +64,7 @@ var def_param = typeof default_param !== 'undefined' ? default_param : 3; // def
 function initIt()
 {
 	document.body.style.overflow = "hidden"; // Disable Scrolling
-	window.onresize = function(){setSize();}
+	window.onresize = function(){setSize(); doChange(null)}
 
     document.getElementById("hide_controls").onclick = function () {
         var hidable = document.getElementById("hidable");
@@ -249,7 +249,7 @@ function initIt()
 		airspaceArray[i] = new google.maps.KmlLayer(ASstring, airspaceOpts);
 	}
 
-
+/*
     var marker = new google.maps.Marker({
         icon: "location.png"
     });
@@ -272,7 +272,7 @@ function initIt()
         // Browser doesn't support Geolocation
         handleLocationError();
     }
-
+*/
 
 	doChange(null);
 }
@@ -658,7 +658,6 @@ function setSize()
 		document.getElementById("Time").size  = 8;
 		document.getElementById("Day").size   = 8;
 	}
-	doChange(null);
 }
 
 
@@ -783,7 +782,7 @@ function doChange(E)
 	oldParam        = document.getElementById("Param").value;
 	oldDayIndex     = document.getElementById("Day").selectedIndex;
 
-	loadImage(1); // forwards
+	loadImage(); // forwards
 }
 
 function getBasedir()
@@ -821,7 +820,7 @@ function doUrl() // Set up URL link
 /* -1 => backwards; 0 => neither; 1 => forwards */
 /************************************************/
 
-function loadImage(dirn)
+function loadImage()
 {
 	var tIdx   = document.getElementById("Time").selectedIndex;
 	var param  = document.getElementById("Param").value;
@@ -843,32 +842,27 @@ function loadImage(dirn)
 		var imgURL =  getBasedir() ;
 	}
 
-	// Load image(s) / overlays and next one(s)
-	for(x = tIdx, i = 0; i < 2; i++){
-		if(!Loaded[x]){
-			t = document.getElementById("Time").options[x].value;
-			ximgURL = imgURL + param;
-            ximgURL += ".curr." + t + "lst.d2" ;
-			if(param.startsWith("sounding") || param == "boxwmax" || param.startsWith("xbl_")){
-				isSounding = true;
-				siz = (Format == "Landscape" ? imgHt : imgWid);
-				Pics[x] = new Image(siz, siz);
-				Pics[x].src = ximgURL + ".png" ;
-			}
-			else{
-				isSounding = false;
-				theTitles[x].src     = ximgURL + ".head.png";
-				theSideScales[x].src = ximgURL + ".side.png";
-				theScales[x].src     = ximgURL + ".foot.png";
-                var fid = document.getElementById("Day").options.selectedIndex
-				Overlays[x]          = new RASPoverlay(forecasts[fid].bounds, ximgURL + ".body.png", map);
-				Overlays[x].setMap(map);
-			}
-			Loaded[x] = true;
-		}
-		x = (x + dirn) % times.length;
-		x = (x < 0) ? times.length - 1 : x;
-	}
+    if(!Loaded[tIdx]){
+        t = document.getElementById("Time").options[tIdx].value;
+        ximgURL = imgURL + param;
+        ximgURL += ".curr." + t + "lst.d2" ;
+        if(param.startsWith("sounding") || param == "boxwmax" || param.startsWith("xbl_")){
+            isSounding = true;
+            siz = (Format == "Landscape" ? imgHt : imgWid);
+            Pics[tIdx] = new Image(siz, siz);
+            Pics[tIdx].src = ximgURL + ".png" ;
+        }
+        else{
+            isSounding = false;
+            theTitles[tIdx].src     = ximgURL + ".head.png";
+            theSideScales[tIdx].src = ximgURL + ".side.png";
+            theScales[tIdx].src     = ximgURL + ".foot.png";
+            var fid = document.getElementById("Day").options.selectedIndex
+            Overlays[tIdx]          = new RASPoverlay(forecasts[fid].bounds, ximgURL + ".body.png", map);
+            Overlays[tIdx].setMap(map);
+        }
+        Loaded[tIdx] = true;
+    }
 
 
 	// Install the new Overlay or Sounding
@@ -881,9 +875,9 @@ function loadImage(dirn)
 			imgData.replaceChild(imgFragment, imgData.firstChild);
 		}
 
-		if ( opacity_control == "N" ) {
+		if (!opacity_control) {
 			createOpacityControl(map);
-			opacity_control = "Y";
+			opacity_control = true;
 		}
 
 		document.getElementById("theTitle").src     = theTitles[tIdx].src;
@@ -894,8 +888,7 @@ function loadImage(dirn)
 			if(Overlays[x]){
 				if(x == tIdx){
 					overlay = Overlays[x];
-					// Big kludge to wait until overlay is loaded :-(
-					window.setTimeout( "overlay.setOpacity();", 0);
+                    overlay.show();
 				}
 				else {
 					Overlays[x].hide();
@@ -1536,7 +1529,7 @@ RASPoverlay.prototype.draw = function()
 	this.div_.style.width  = Math.abs(sw.x - ne.x) + "px";
 	this.div_.style.height = Math.abs(ne.y - sw.y) + "px";
 
-	this.hide();	// show() is run later
+    this.setOpacity();
 }
 
 // Remove the main DIV from the map pane
@@ -1570,28 +1563,20 @@ RASPoverlay.prototype.show = function()
 RASPoverlay.prototype.setOpacity=function()
 {
 	var c = opacity/100 ;
-	var d = document.getElementById( this.id ) ;
 
-	if (d) {
-		this.show();
-		if (typeof(d.style.filter)       == 'string') { d.style.filter = 'alpha(opacity=' + opacity + ')'; } //IE
-		if (typeof(d.style.KHTMLOpacity) == 'string') { d.style.KHTMLOpacity = c ; }
-		if (typeof(d.style.MozOpacity)   == 'string') { d.style.MozOpacity = c ; }
-		if (typeof(d.style.opacity)      == 'string') { d.style.opacity = c ; }
-		doUrl();
-	}
+    if (typeof(this.div_.style.filter)       == 'string') { this.div_.style.filter = 'alpha(opacity=' + opacity + ')'; } //IE
+    if (typeof(this.div_.style.KHTMLOpacity) == 'string') { this.div_.style.KHTMLOpacity = c ; }
+    if (typeof(this.div_.style.MozOpacity)   == 'string') { this.div_.style.MozOpacity = c ; }
+    if (typeof(this.div_.style.opacity)      == 'string') { this.div_.style.opacity = c ; }
 }
 
 
 RASPoverlay.prototype.getOpacity=function()
 {
-	var d = document.getElementById(this.id);
-	if(d){
-		if (typeof(d.style.filter)       == 'string') { d.style.filter = 'alpha(opacity=' + opacity + ');'; } //IE
-		if (typeof(d.style.KHTMLOpacity) == 'string') { return(100 * d.style.KHTMLOpacity); }
-		if (typeof(d.style.MozOpacity)   == 'string') { return(100 * d.style.MozOpacity);   }
-		if (typeof(d.style.opacity)      == 'string') { return(100 * d.style.opacity);      }
-	}
+    if (typeof(this.div_.style.filter)       == 'string') { this.div_.style.filter = 'alpha(opacity=' + opacity + ');'; } //IE
+    if (typeof(this.div_.style.KHTMLOpacity) == 'string') { return(100 * this.div_.style.KHTMLOpacity); }
+    if (typeof(this.div_.style.MozOpacity)   == 'string') { return(100 * this.div_.style.MozOpacity);   }
+    if (typeof(this.div_.style.opacity)      == 'string') { return(100 * this.div_.style.opacity);      }
 	return(undefined);
 }
 
