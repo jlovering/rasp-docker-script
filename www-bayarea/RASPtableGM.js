@@ -7,7 +7,7 @@
  * Line 1227
  */
 
-/* 
+/*
  * Global Variables
  */
 
@@ -91,7 +91,7 @@ function initIt()
 	/**********************/
 
 	var day = document.getElementById("Day");	// save typing
-    
+
     for (var i = 0; i < forecasts.length; i++) {
         day.options[i] = new Option(forecasts[i].name);
     }
@@ -128,11 +128,11 @@ function initIt()
 	document.getElementById("Day").options[0].selected    = true;				// Today
 	document.getElementById("Param").options[def_param].selected  = true;				// hcrit
 	document.getElementById("desc").innerHTML = paramListFull[document.getElementById("Param").selectedIndex][def_param] ;
-    
+
     document.getElementById("help_button").onclick = function() {
         alert((document.getElementById("desc")).innerHTML);
     }
-    
+
 
     setTimes();
 
@@ -180,7 +180,7 @@ function initIt()
 						document.getElementById("Time").options[j].selected = true;
 				}
 			}
-				
+
 			if(prams[0] == "date"){
 				var dateNow = new Date();
 				dateNow.setHours(0, 0, 0, 0);
@@ -248,8 +248,8 @@ function initIt()
 		ASstring = head + "/" + airspacetype[i].value ;
 		airspaceArray[i] = new google.maps.KmlLayer(ASstring, airspaceOpts);
 	}
-	
-   
+
+
     var marker = new google.maps.Marker({
         icon: "location.png"
     });
@@ -262,7 +262,7 @@ function initIt()
                 lat: position.coords.latitude,
                 lng: position.coords.longitude
             };
-            
+
             marker.setPosition(pos);
             marker.setMap(map);
         }, function() {
@@ -296,7 +296,7 @@ function parseLatLon2d (txt) {
     row = []
     for (var i = 0, j = lines.length; i < j; i++) {
         var line = lines[i].trim();
-        
+
         if (!line) { // row separator
             table.push(row);
             row = [];
@@ -335,7 +335,7 @@ function constrainMap(E)
 
 	while(!(VPbounds = map.getBounds()))
 		; // Hmmm! Busy wait?
-	
+
 	// Register new zoom & centre values in Page URL
 	zoom = map.getZoom();
 	centre = map.getCenter();
@@ -389,7 +389,7 @@ function addSoundingLink(marker, n)
 			centre = map.getCenter();
 			var sndURL = '<img src="' + getBasedir() + '/';
 			sndURL += 'sounding' + n + '.curr.'
-					+ document.getElementById("Time").value 
+					+ document.getElementById("Time").value
 					+ 'lst.d2.png" height=800 width=800>' ;
 					// + 'lst.d2.png" height=400 width=400>' ;
 			var infowindow = new google.maps.InfoWindow( { content: sndURL });
@@ -475,7 +475,7 @@ function checkParam()
 	var param =document.getElementById("Param").value;
     if (badParams.includes(param))
         return "";
-    
+
     if (param.startsWith('xbl_'))
         return '';
 
@@ -498,7 +498,7 @@ function checkParam()
 	return param ;
 }
 
-			
+
 var req = false;
 
 function doCallback(url, data, Event)
@@ -590,7 +590,7 @@ function setSize()
 		botHeight = imgWid * 0.09;
 	}
 
-	/* 
+	/*
 	 * See http://www.w3schools.com/Css/pr_class_position.asp
 	 * for interaction of position = absolute, fixed, relative, static & inherit
 	 */
@@ -646,7 +646,7 @@ function setSize()
 	tblHt = document.getElementById("selectors").offsetHeight;
 
 	// alert("TableHt = " + tblHt + "ImgHt = " + imgHt);
-			
+
 	if( tblHt > imgHt ){
 		document.getElementById("Param").size = 1;	// Number of visible Parameters
 		document.getElementById("Time").size  = 1;	// Number of visible Times
@@ -662,7 +662,7 @@ function setSize()
 }
 
 
-/* 
+/*
  * Set the times in the table for STD or DST
  *
  */
@@ -672,7 +672,7 @@ function setTimes()
 	var dateNow = new Date();
 
     var fid = document.getElementById("Day").selectedIndex;
-    
+
     dateNow.setTime(forecasts[fid].date)
 
 	if(dateNow.getTimezoneOffset() == dateJan.getTimezoneOffset())
@@ -696,7 +696,7 @@ function checkDate(strDate, expectedDate) {
     var gotDate = new Date(d[0], d[1] - 1, d[2])
     var expected = new Date()
     expected.setTime(expectedDate)
-    
+
     var got = "{0} {1} {2}".format(gotDate.getFullYear(), gotDate.getMonth(), gotDate.getDate());
     var exp = "{0} {1} {2}".format(expected.getFullYear(), expected.getMonth(), expected.getDate());
 
@@ -709,7 +709,7 @@ function checkDate(strDate, expectedDate) {
 
 
 function get_current_data_file(callback) {
-        
+
     // check if the date is current or not
     var tIdx   = document.getElementById("Time").selectedIndex;
     var param  = checkParam();
@@ -717,7 +717,7 @@ function get_current_data_file(callback) {
         return;
     }
     var imgURL =  getBasedir() ;
-    
+
     if (param.includes(' ')) {
         param = param.split(' ')[0]
     }
@@ -768,11 +768,11 @@ function doChange(E)
 		}
 		setTimes();
 	}
-	
+
 	if (oldDayIndex !== document.getElementById("Day").selectedIndex) {
         // check if the date is current or not
         var fid = document.getElementById("Day").selectedIndex;
-        
+
         get_current_data_file(function (data) {
             checkDate(data.header['Day'], forecasts[fid].date)
         })
@@ -810,8 +810,8 @@ function doUrl() // Set up URL link
 		+ "&param="   + document.getElementById("Param").value
 		+ "&time="    + document.getElementById("Time").value
 		+ "&zoom="    + zoom
-		+ "&opacity=" + opacity  
-		+ "&centre="  + centre.toUrlValue(); 
+		+ "&opacity=" + opacity
+		+ "&centre="  + centre.toUrlValue();
 	document.getElementById("Url").innerHTML = '<a href="' + str +'">Page URL</a>';
 }
 
@@ -881,8 +881,8 @@ function loadImage(dirn)
 			imgData.replaceChild(imgFragment, imgData.firstChild);
 		}
 
-		if ( opacity_control == "N" ) {	
-			createOpacityControl(map); 
+		if ( opacity_control == "N" ) {
+			createOpacityControl(map);
 			opacity_control = "Y";
 		}
 
@@ -976,27 +976,27 @@ Rect.prototype.ij = function () {
 
 Rect.prototype.path = function (ll_table) {
     var path = [
-        ll_table[this.rj.a][this.ri.a], 
-        ll_table[this.rj.b][this.ri.a], 
-        ll_table[this.rj.b][this.ri.b], 
-        ll_table[this.rj.a][this.ri.b], 
+        ll_table[this.rj.a][this.ri.a],
+        ll_table[this.rj.b][this.ri.a],
+        ll_table[this.rj.b][this.ri.b],
+        ll_table[this.rj.a][this.ri.b],
     ];
         /*
     var j = this.rj.a;
     for (var i = this.ri.a, to = this.ri.b; i < to; i++) {
         path.push(ll_table[j][i]);
     }
-    
+
     var i = this.ri.b;
     for (var j = this.rj.a, to = this.rj.b; j < to; j++) {
         path.push(ll_table[j][i]);
     }
-    
+
     var j = this.rj.b;
     for (var i = this.ri.b, to = this.ri.a; i > to; i--) {
         path.push(ll_table[j][i]);
     }
-    
+
     var i = this.ri.a;
     for (var j = this.rj.b, to = this.rj.a; j > to; j--) {
         path.push(ll_table[j][i]);
@@ -1032,16 +1032,16 @@ function _latlon2ij(latLng, rect, ll_table) {
     if (!rect.splittable()) {
         return rect.ij();
     }
-    
+
     var split = rect.split()
-    
+
     for (var i = 0; i < 2; i++) {
         var test = split[i];
-        
+
         var path = test.path(ll_table);
-                
+
         var poly = new google.maps.Polygon({paths: path});
-        
+
 //         debug mode
 //         poly.setMap(map);
 
@@ -1056,14 +1056,14 @@ function latlon2ij(latLng, ll_table) {
     iRange = new Range(0, ll_table[0].length - 1);
     jRange = new Range(0, ll_table.length - 1);
     var rect = new Rect(iRange, jRange);
-    
+
     return _latlon2ij(latLng, rect, ll_table);
 }
 
 if (!String.prototype.format) {
   String.prototype.format = function() {
     var args = arguments;
-    return this.replace(/{(\d+)}/g, function(match, number) { 
+    return this.replace(/{(\d+)}/g, function(match, number) {
       return typeof args[number] != 'undefined'
         ? args[number]
         : match
@@ -1092,8 +1092,8 @@ function parseData(fname, txt) {
     var data = {};
     var header = data.header = {};
     var init = false;
-    // The first data row is for the grid row having the smallest y index, i.e. the most "southerly" row, 
-    // with subsequent rows being for increasing y index values. The actual value at each grid point is the 
+    // The first data row is for the grid row having the smallest y index, i.e. the most "southerly" row,
+    // with subsequent rows being for increasing y index values. The actual value at each grid point is the
     // printed data value divided by the given multiplication factor.
     var table = data.table = [];
     for(var i = 0, maxi = lines.length - 1; i < maxi ; i ++) {
@@ -1115,7 +1115,7 @@ function parseData(fname, txt) {
 
         table.push(line.split(' ').map(function(v) { return parseInt(v) * header['Mult'] }));
     }
-    
+
     return data;
 
 }
@@ -1171,16 +1171,16 @@ function newclick(E)
 {
 	var tail;
 	var parameter;
-    
+
     console.log(E.latLng.lat(), E.latLng.lng())
-    
+
     var fid = document.getElementById("Day").options.selectedIndex
 
 	if( !forecasts[fid].bounds.contains(E.latLng)){ // Outside forecast area!
         console.log('Outside boundaries')
 		return;
 	}
-	
+
 	var latlon_file = forecasts[fid].latlon_file;
 
     if (!latLon2d[latlon_file]) {
@@ -1194,13 +1194,13 @@ function newclick(E)
         });
         return;
     }
-    
+
     ij = latlon2ij(E.latLng, latLon2d[latlon_file]);
-    if (!ij) { 
+    if (!ij) {
         console.log('No IJ');
         return ;
     };
-    
+
     get_current_data_file(function (data) {
         showTooltip(data, ij, E.latLng);
     });
@@ -1215,7 +1215,7 @@ function addInfo(location, txt)
 
 	// if((imgWid < 480) || (imgHeight < 480))	// Remove other infoWindows on small screens
 	//	deleteInfo();
-	
+
 	var el = document.getElementById("popup").info;
 
 	for(i = 0; i < el.length; i++){
@@ -1423,7 +1423,7 @@ var p = null;
 function myMouseWheel_(e)
 {
 	e = e || window.event;
-	if (e.wheelDelta) { // IE/Opera/Chrome. 
+	if (e.wheelDelta) { // IE/Opera/Chrome.
 		delta = e.wheelDelta/120;
 		if (window.opera)
 			delta = -delta; // In Opera 9, delta differs in sign as compared to IE
@@ -1488,8 +1488,8 @@ function RASPoverlay(bounds, image, map)
 	}
 }
 
-var mouseWheelListener_   = null; 
-var mouseWheelListener2_  = null; 
+var mouseWheelListener_   = null;
+var mouseWheelListener2_  = null;
 
 RASPoverlay.prototype.onAdd = function()
 {
@@ -1545,7 +1545,7 @@ RASPoverlay.prototype.onRemove = function()
 	this.div_.parentNode.removeChild(this.div_);
 }
 
-/* 
+/*
  * Opacity utility functions
  */
 RASPoverlay.prototype.isVisible = function()
@@ -1677,7 +1677,7 @@ function addSndMarkers()
 		return;
 	}
 	var siz    = 20;
-	var anchor = siz / 2; 
+	var anchor = siz / 2;
 	var sndImg = new google.maps.MarkerImage(
 	                   "sndmkr.png",                   // url
 	                   new google.maps.Size(siz,siz),  // size
