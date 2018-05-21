@@ -1,4 +1,4 @@
-FROM yavalek/drjack-wrf3:latest as rasp-blipmap-bayarea-geog-builder
+FROM yavalek/drjack-wrf3:latest
 
 ENV BASEDIR=/root/rasp
 ENV SITENAME=BAYAREA
