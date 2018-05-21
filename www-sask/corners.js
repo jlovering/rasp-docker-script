@@ -14,12 +14,12 @@ corners.Bounds = new Array();
 corners.Centre = new Array();
 
 corners.Bounds[4] = new google.maps.LatLngBounds(
-        new google.maps.LatLng(36.6842766, -123.2363739), // SW
-        new google.maps.LatLng(38.7637024, -120.9433594)  // NE
+        new google.maps.LatLng(49.5556412, -108.6133575), // SW
+        new google.maps.LatLng(52.8958397, -103.1312256)  // NE
     );
-    corners.Centre[4] = new google.maps.LatLng(37.7239914, -122.0898666);
+corners.Centre[4] = new google.maps.LatLng(51.2257385, -105.8722916);
 
-var ImageBucket = 'https://storage.googleapis.com/bucket-blipmap-bayarea-4k/'
+var ImageBucket = 'https://storage.googleapis.com/bucket-blipmap-sask-4k/'
 var FcstForwardDays = 2
 var NumberOfRuns = 2
 var RunHour = 8

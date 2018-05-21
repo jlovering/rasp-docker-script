@@ -1,9 +1,7 @@
 [
     {
-      "origin": ["http://blipmap.bayarea-4k.skypeople.info",
-                "http://www.blipmap.bayarea-4k.skypeople.info",
-                "https://blipmap.bayarea-4k.skypeople.info",
-                "https://www.blipmap.bayarea-4k.skypeople.info" ],
+      "origin": ["https://blipmap.sask-4k.skypeople.info",
+                "https://www.blipmap.sask-4k.skypeople.info" ],
       "method": ["GET", "HEAD"]
     }
 ]
