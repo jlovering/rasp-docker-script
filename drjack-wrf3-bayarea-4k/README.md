@@ -10,22 +10,23 @@ docker build -f Dockerfile.local -t my-rasp-bayarea-4k .
 
 # Extract cloud build context
 ```
-mkdir ./Docker-cloud-context
+mkdir ./Dockercloud/Dockercloud-context
 docker container create --name extract my-rasp-bayarea-4k
-docker container cp extract:/root/rasp/BAYAREA ./Docker-cloud-context
+docker container cp extract:/root/rasp/BAYAREA ./Dockercloud/Dockercloud-context
 docker container rm -f extract
-cp BAYAREA/rasp.region_data.ncl ./Docker-cloud-context
-cp BAYAREA/rasp.site.runenvironment ./Docker-cloud-context
+find Dockercloud/Dockercloud-context -type l -exec rm -f {} \;
+cp BAYAREA/rasp.region_data.ncl ./Dockercloud/Dockercloud-context
+cp BAYAREA/rasp.site.runenvironment ./Dockercloud/Dockercloud-context
 ```
 
 # Local slim build
 ```
-docker build -f Dockerfile.cloud -t my-rasp-bayarea-4k-slim Docker-cloud-context/
+docker build -f Dockercloud/Dockerfile.cloud -t my-rasp-bayarea-4k-slim Dockercloud/
 ```
 
 # Cloud slim build
 ```
-gcloud container builds submit --config cloudbuild.yaml Docker-cloud-context
+cd Dockercloud && gcloud container builds submit --config cloudbuild.yaml .
 ```
 
 # Running
