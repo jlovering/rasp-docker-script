@@ -1,0 +1,9 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: [
+            'build',
+            '-f', 'Dockerfile.cloud'
+            '-t', 'gcr.io/wrf-blipmaps/rasp-blipmap-sask-4k:latest',
+            'Docker-cloud-context'
+        ]
+images: ['gcr.io/wrf-blipmaps/rasp-blipmap-sask-4k:latest']
