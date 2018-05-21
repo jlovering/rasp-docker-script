@@ -24,6 +24,11 @@ cp BAYAREA/rasp.site.runenvironment ./Dockercloud/Dockercloud-context
 docker build -f Dockercloud/Dockerfile.cloud -t my-rasp-bayarea-4k-slim Dockercloud/
 ```
 
+# Local Cloud build test
+```
+cd Dockercloud && container-builder-local --config=cloudbuild.yaml --dryrun=false .
+```
+
 # Cloud slim build
 ```
 cd Dockercloud && gcloud container builds submit --config cloudbuild.yaml .
