@@ -1,0 +1,32 @@
+FROM yavalek/drjack-wrf3:latest as rasp-blipmap-bayarea-geog-builder
+
+ENV BASEDIR=/root/rasp
+ENV SITENAME=BAYAREA
+
+WORKDIR /root
+
+ADD geog.tar.gz ${BASEDIR}
+#RUN cd ${BASEDIR} && curl -SL https://www.dropbox.com/s/x6wcsm7c26vt67a/geog.tar.gz?dl=0 | tar -xz
+
+RUN cp -a ${BASEDIR}/region.TEMPLATE ${BASEDIR}/${SITENAME}
+
+COPY ${SITENAME}/wrfsi.nl ${SITENAME}/rasp.run.parameters.${SITENAME} ${BASEDIR}/${SITENAME}/
+COPY ${SITENAME}/rasp.region_data.ncl ${BASEDIR}/GM/
+COPY ${SITENAME}/rasp.site.runenvironment ${BASEDIR}/
+
+ENV PATH="${BASEDIR}/bin:${PATH}"
+
+# initialize
+RUN cd ${BASEDIR}/${SITENAME}/ \
+  && wrfsi2wps.pl \
+  && wps2input.pl \
+  && geogrid.exe
+
+# cleanup
+RUN rm -rf ${BASEDIR}/geog
+
+WORKDIR /root/rasp
+
+VOLUME ["/root/rasp/${SITENAME}/OUT/", "/root/rasp/${SITENAME}/LOG/"]
+
+CMD ["runGM", "BAYAREA"]

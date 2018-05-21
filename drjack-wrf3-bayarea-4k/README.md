@@ -5,7 +5,27 @@ Make sure to download geog.tar.gz into current directory from here: https://www.
 Then run:
 
 ```
-docker build -t my-rasp-bayarea-4k .
+docker build -f Dockerfile.local -t my-rasp-bayarea-4k .
+```
+
+# Extract cloud build context
+```
+mkdir ./Docker-cloud-context
+docker container create --name extract my-rasp-bayarea-4k
+docker container cp extract:/root/rasp/BAYAREA ./Docker-cloud-context
+docker container rm -f extract
+cp BAYAREA//rasp.region_data.ncl ./Docker-cloud-context
+cp BAYAREA/rasp.site.runenvironment ./Docker-cloud-context
+```
+
+# Local slim build
+```
+docker build -f Dockerfile.cloud -t my-rasp-bayarea-4k-slim Docker-cloud-context/
+```
+
+# Cloud slim build
+```
+gcloud container builds submit --config cloudbuild.yaml Docker-cloud-context
 ```
 
 # Running
