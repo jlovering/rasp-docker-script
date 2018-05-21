@@ -14,7 +14,7 @@ mkdir ./Docker-cloud-context
 docker container create --name extract my-rasp-bayarea-4k
 docker container cp extract:/root/rasp/BAYAREA ./Docker-cloud-context
 docker container rm -f extract
-cp BAYAREA//rasp.region_data.ncl ./Docker-cloud-context
+cp BAYAREA/rasp.region_data.ncl ./Docker-cloud-context
 cp BAYAREA/rasp.site.runenvironment ./Docker-cloud-context
 ```
 
