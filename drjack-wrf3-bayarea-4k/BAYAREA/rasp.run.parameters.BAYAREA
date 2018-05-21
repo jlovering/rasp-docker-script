@@ -62,14 +62,10 @@
 
 
 ###### SET DOMAIN PARAMETERS FOR STAGE1 [NON-WINDOW] ITERATION
-  #12hr_run:
   $FORECAST_PERIODHRS{'BAYAREA'}[0] = 15;              # used only by initialization programs
-  #15hr_run:    $FORECAST_PERIODHRS{'BAYAREA'}[0] = 15;       # used only by initialization programs
   ### SET DOMAIN START/END TIMES
   $DOMAIN1_STARTHH{'BAYAREA'}[0] = '12';               # must have grib file available for this time
-  #12hr_run:
   $DOMAIN1_ENDHH{'BAYAREA'}[0] = '03';                 #
-  #15hr_run:    $DOMAIN1_ENDHH{'BAYAREA'}[0] = '03';              #
   $DOMAIN2_START_DELTAMINS{'BAYAREA'}[0] = 0;          # if non-zero, must set namelist.template INPUT_FROM_FILE=false
   $DOMAIN2_END_DELTAMINS{'BAYAREA'}[0] = 0;            # relative to domain1
   $DOMAIN3_START_DELTAMINS{'BAYAREA'}[0] = 420;        # if non-zero, must set namelist.template INPUT_FROM_FILE=false
@@ -82,12 +78,10 @@
   ### SET BLIPMAP IMAGE SIZES  - 1st,2nd value for 1st,2nd domain - blank=NOplot
   @{$PLOT_IMAGE_SIZE{'BAYAREA'}[0]} = ( '', '1200x1200' );
   ### SET HISTORY HOUR FOR IMAGES PLOTTED WHEN $PLOT_IMAGE_SIZE FOR THAT DOMAIN NOT BLANK
-  #12hr_run:
-  @{$PLOT_HHMMLIST{'BAYAREA'}[0]} =  ('1800', '1900', '2000', '2100', '2200', '2300', '0000', '0100' );
-  #15hr_run:  @{$PLOT_HHMMLIST{'BAYAREA'}[0]} =  ( '1200', '1500', '1800', '2100', '0000','0300' );
+  @{$PLOT_HHMMLIST{'BAYAREA'}[0]} =  ('1500', '1600', '1700', '1800', '1900', '2000', '2100', '2200', '2300', '0000', '0100', '0200', '0300' );
   ### CREATE WEBSITE IMAGE LOOP
   #12hr_run:
-  @{$PLOT_LOOP_HHMMLIST{'BAYAREA'}[0]} =  ( 'title', '1200', '1500', '1800', '2100', '0000' );
+  @{$PLOT_LOOP_HHMMLIST{'BAYAREA'}[0]} =  ( 'title' );
   #15hr:  @{$PLOT_LOOP_HHMMLIST{'BAYAREA'}[0]} =  ( 'title', '1200', '1500','1800', '2100', '0000', '0300' );
   ### SET HISTORY HOUR FOR IMAGES SAVED WHEN LSAVE>0 AND $PLOT_IMAGE_SIZE FOR THAT DOMAIN NOT BLANK
   #12hr_run:
