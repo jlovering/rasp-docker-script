@@ -16,6 +16,9 @@ let SH=${STARTHH}+$DAY_OFFSET*24
 L_USER='jon_lovering'
 GSUTIL_CMD='python /mnt/stateful_partition/bin/gsutil/gsutil'
 
+# Update the docker
+docker pull ${DOCKER_IMAGE}
+
 # Run the model
 docker \
     --config="/home/${L_USER}/.docker" \
