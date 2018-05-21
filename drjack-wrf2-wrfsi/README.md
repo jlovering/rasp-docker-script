@@ -2,16 +2,21 @@
 This Dockerfile builds an image containing Dr. Jack's version of WRF v2 and WRFSI v2 software. 
 It is useful for creating new RASP grids. See http://www.drjack.info/twiki/bin/view/RASPop/GuiGridCreationSteps 
 for more information
+Useful domain visualizer: http://wxtofly.net/beta/WRFDomainWizard.html
 
 # Downloading and running
 You can download and run pre-built container. First, allow connecting to your X server:
 ```
-$ xhost +
+xhost + 127.0.0.1
 ```
 Then run:
+### Linux
 ```
-$ docker run -it -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix yavalek/drjack-wrf2-wrfsi
-# ./wrf_tools
+docker run -it -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix yavalek/drjack-wrf2-wrfsi
+```
+### Mac
+```
+docker run -it -e DISPLAY=docker.for.mac.localhost:0 yavalek/drjack-wrf2-wrfsi
 ```
 
 # Building
