@@ -1,0 +1,18 @@
+FROM yavalek/drjack-wrf3:latest
+
+ENV BASEDIR=/root/rasp
+ENV SITENAME=SASK
+ENV CONTEXT=Dockercloud-context
+ENV PATH="${BASEDIR}/bin:${PATH}"
+
+WORKDIR /root/rasp
+
+RUN cp -a ${BASEDIR}/region.TEMPLATE ${BASEDIR}/${SITENAME}
+
+COPY ${CONTEXT}/${SITENAME} ${BASEDIR}/${SITENAME}
+COPY ${CONTEXT}/rasp.region_data.ncl ${BASEDIR}/GM/
+COPY ${CONTEXT}/rasp.site.runenvironment ${BASEDIR}/
+
+VOLUME ["/root/rasp/${SITENAME}/OUT/", "/root/rasp/${SITENAME}/LOG/"]
+
+CMD ["runGM", "SASK"]

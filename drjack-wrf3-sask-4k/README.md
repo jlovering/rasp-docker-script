@@ -10,17 +10,23 @@ docker build -f Dockerfile.local -t my-rasp-sask-4k .
 
 # Extract cloud build context
 ```
-mkdir ./Docker-cloud-context
+mkdir ./Dockercloud/Dockercloud-context
 docker container create --name extract my-rasp-sask-4k
-docker container cp extract:/root/rasp/SASK ./Docker-cloud-context
+docker container cp extract:/root/rasp/SASK ./Dockercloud/Dockercloud-context
 docker container rm -f extract
-cp SASK/rasp.region_data.ncl ./Docker-cloud-context
-cp SASK/rasp.site.runenvironment ./Docker-cloud-context
+find Dockercloud/Dockercloud-context -type l -exec rm -f {} \;
+cp SASK/rasp.region_data.ncl ./Dockercloud/Dockercloud-context
+cp SASK/rasp.site.runenvironment ./Dockercloud/Dockercloud-context
 ```
 
 # Local slim build
 ```
 docker build -f Dockerfile.cloud -t my-rasp-sask-4k-slim Docker-cloud-context/
+```
+
+# Local Cloud build test
+```
+cd Dockercloud && container-builder-local --config=cloudbuild.yaml --dryrun=false .
 ```
 
 # Cloud slim build
@@ -37,11 +43,11 @@ $ docker run -v /tmp/OUT:/root/rasp/SASK/OUT/ -v /tmp/LOG:/root/rasp/SASK/LOG/  
 
 ## Run the current day +1, +2, etc
 
-START_HOUR environment variable can override default start hour which is 12. See ![rasp.run.parameters.SASK](SASK/rasp.run.parameters.SASK)
+START_HOUR environment variable can override default start hour which is 9. See ![rasp.run.parameters.SASK](SASK/rasp.run.parameters.SASK)
 
-* START_HOUR=36 for current day +1
-* START_HOUR=60 for current day +2, etc
+* START_HOUR=33 for current day +1
+* START_HOUR=57 for current day +2, etc
 
 ```
-docker run -v /tmp/OUT:/root/rasp/SASK/OUT/ -v /tmp/LOG:/root/rasp/SASK/LOG/ --rm -e START_HOUR=36 my-rasp-sask-4k
+docker run -v /tmp/OUT:/root/rasp/SASK/OUT/ -v /tmp/LOG:/root/rasp/SASK/LOG/ --rm -e START_HOUR=33 my-rasp-sask-4k
 ```
