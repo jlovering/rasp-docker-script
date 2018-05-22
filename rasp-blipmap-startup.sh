@@ -17,7 +17,9 @@ L_USER='jon_lovering'
 GSUTIL_CMD='python /mnt/stateful_partition/bin/gsutil/gsutil'
 
 # Update the docker
-docker pull ${DOCKER_IMAGE}
+docker \
+    --config="/home/${L_USER}/.docker" \
+    pull ${DOCKER_IMAGE}
 
 # Run the model
 docker \
@@ -33,6 +35,7 @@ docker \
     -v /tmp/OUT:/root/rasp/${SITE_NAME}/OUT/ \
     -v /tmp/LOG:/root/rasp/${SITE_NAME}/LOG/ \
     -e START_HOUR=$SH \
+    --rm \
     ${DOCKER_IMAGE}
 
 # Upload the output
@@ -44,6 +47,10 @@ su $L_USER -c "$GSUTIL_CMD -m cp /tmp/${RUN_DATE}_${FCST_DATE}_logs.tgz ${BUCKET
 
 touch /tmp/${RUN_DATE}_${FCST_DATE}.exists
 su $L_USER -c "$GSUTIL_CMD -m cp /tmp/${RUN_DATE}_${FCST_DATE}.exists ${BUCKET_URI}/index/"
+
+# Clean up old dockers
+docker image prune -f
+docker container prune -f
 
 # Shutdown
 shutdown -h now
