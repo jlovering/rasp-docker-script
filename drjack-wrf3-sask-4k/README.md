@@ -21,7 +21,7 @@ cp SASK/rasp.site.runenvironment ./Dockercloud/Dockercloud-context
 
 # Local slim build
 ```
-docker build -f Dockerfile.cloud -t my-rasp-sask-4k-slim Docker-cloud-context/
+docker build -f Dockercloud/Dockerfile.cloud -t my-rasp-sask-4k-slim Dockercloud
 ```
 
 # Local Cloud build test
@@ -31,7 +31,7 @@ cd Dockercloud && container-builder-local --config=cloudbuild.yaml --dryrun=fals
 
 # Cloud slim build
 ```
-gcloud container builds submit --config cloudbuild.yaml Docker-cloud-context
+cd Dockercloud && gcloud container builds submit --config cloudbuild.yaml .
 ```
 
 # Running
