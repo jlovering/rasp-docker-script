@@ -24,7 +24,7 @@ WORKDIR /root/
 # Unpack software packages
 # Assuming you have downloaded these files from here: http://rasp-uk.uk/SOFTWARE/WRFV3.x/
 #
-ADD WRFV3.9/rangs.tgz $BASEDIR
+ADD ../WRFV3.9/rangs.tgz $BASEDIR
 # Unpack raspGM
 ADD https://github.com/jlovering/rasp-gm/archive/stable.tar.gz $BASEDIR
 

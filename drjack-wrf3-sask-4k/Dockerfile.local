@@ -5,8 +5,7 @@ ENV SITENAME=SASK
 
 WORKDIR /root
 
-ADD geog.tar.gz ${BASEDIR}
-#RUN cd ${BASEDIR} && curl -SL https://www.dropbox.com/s/x6wcsm7c26vt67a/geog.tar.gz?dl=0 | tar -xz
+ADD ../WFRV3.9/geog.tbz2 ${BASEDIR}
 
 RUN cp -a ${BASEDIR}/region.TEMPLATE ${BASEDIR}/${SITENAME}
 
