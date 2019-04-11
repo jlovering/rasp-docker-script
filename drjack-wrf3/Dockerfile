@@ -8,7 +8,7 @@ RUN mkdir $BASEDIR
 RUN yum -y update \
   && yum -y install netcdf-fortran libpng15 iproute-tc tcp_wrappers-libs sendmail procmail psmisc procps-ng mailx \
   findutils ImageMagick perl-CPAN ncl netcdf libpng libjpeg-turbo which patch vim less bzip2
-  
+
 # configure CPAN and install required modules
 RUN (echo y;echo o conf prerequisites_policy follow;echo o conf commit) | cpan \
   && cpan install Proc/Background.pm
@@ -24,10 +24,9 @@ WORKDIR /root/
 # Unpack software packages
 # Assuming you have downloaded these files from here: http://rasp-uk.uk/SOFTWARE/WRFV3.x/
 #
-ADD rangs.tgz $BASEDIR
-ADD PANOCHE.tgz $BASEDIR
+ADD WRFV3.9/rangs.tgz $BASEDIR
 # Unpack raspGM
-ADD https://github.com/wargoth/rasp-gm/archive/stable.tar.gz $BASEDIR
+ADD https://github.com/jlovering/rasp-gm/archive/stable.tar.gz $BASEDIR
 
 RUN cd $BASEDIR \
   && tar xf stable.tar.gz --strip-components=1 \
@@ -41,7 +40,7 @@ RUN echo export BASEDIR=$BASEDIR >> /etc/bashrc \
   && echo export PATH+=:\$BASEDIR/bin >> /etc/bashrc
 
 
-# cleanup 
+# cleanup
 RUN yum clean all
 
 CMD ["bash"]
