@@ -1,4 +1,4 @@
-FROM yavalek/drjack-wrf3:latest
+FROM gcr.io/wrf-blipmaps/rasp-blimap-base:latest
 
 ENV BASEDIR=/root/rasp
 ENV SITENAME=SASK
